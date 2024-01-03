@@ -1,0 +1,1179 @@
+Attribute VB_Name = "modOrdFunctions"
+Public Sub CreateCheck(NewOrSplit As String)  ' x
+    On Error GoTo ErrorHandler
+    
+    Dim StartTime, EndTime, CheckHour, CheckMin, CheckTime, rsOldCheck
+    Dim strSQL, saveError As String
+    Dim wMenuID, CheckNo As Long
+    Dim errctr As Integer
+    
+    wMenuID = 0
+    saveError = ""
+    If NewOrSplit = "Split" Then
+        strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+        Set rsOldCheck = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        rsOldCheck.MoveFirst
+    End If
+    
+    gChkTimeCrt = Date & " " & Time
+    CheckHour = DatePart("h", gChkTimeCrt)
+    CheckMin = DatePart("n", gChkTimeCrt)
+    If CheckMin < 10 Then
+        CheckMin = "0" & CheckMin
+    End If
+    CheckTime = CheckHour & CheckMin
+    'If DatePart("n", gChkTimeCrt) = 0 Then
+    '    CheckTime = CheckTime & "0"  ' to get "1500" instead of "150"
+    'End If
+    
+    If NewOrSplit = "New" Then
+        If Not gBarScreen Then
+            strSQL = "SELECT * FROM Menus WHERE Active And Not [Bar Menu]"
+        Else
+            strSQL = "SELECT * FROM Menus WHERE Active And [Bar Menu]"
+        End If
+        Set rsMenu = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        rsMenu.MoveFirst
+        Do While rsMenu.EOF <> True  ' get current menu based on Check create time
+            StartTime = DatePart("h", rsMenu.[Start Time]) & DatePart("n", rsMenu.[Start Time])
+            If DatePart("n", rsMenu.[Start Time]) = 0 Then
+                StartTime = StartTime & "0"  ' to get "1500" instead of "150"
+            End If
+            EndTime = DatePart("h", rsMenu.[End Time]) & DatePart("n", rsMenu.[End Time])
+            If DatePart("n", rsMenu.[End Time]) = 0 Then
+                EndTime = EndTime & "0"  ' to get "1500" instead of "150"
+            End If
+            
+            If Not IsNull(StartTime) And Not IsNull(EndTime) Then
+                If CInt(StartTime) <= CInt(CheckTime) And CInt(EndTime) >= CInt(CheckTime) Then
+                    wMenuID = rsMenu.[Menu ID]
+                    gMenuID = wMenuID
+                    Exit Do  ' exit loop when first in-range menu found
+                End If
+            End If
+            rsMenu.MoveNext
+        Loop
+        rsMenu.Close
+     End If
+     
+     'create new check record
+    strSQL = "SELECT MAX([Check Number]) as maxC FROM Checks"
+    Set rsC = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    'rsC.MoveLast
+    'CheckNo = rsC.[Check Number]
+    CheckNo = rsC.maxc
+    rsC.Close
+    'Set rsC = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    Set rsC = gDB.OpenRecordset("Checks", dbOpenDynaset)
+    errctr = 0
+    Do While errctr < 2000
+        CheckNo = CheckNo + 1
+        saveError = ""
+        rsC.AddNew
+        rsC.[Check Number] = CheckNo
+        rsC.[Server Number] = gLoggedInEmp
+        rsC.[Bar Check] = gBarScreen
+        rsC.Show = True
+        rsC.Workstation = gWSName
+        rsC.[Time Created] = gChkTimeCrt
+        If NewOrSplit = "Split" Then
+            rsC.[Menu ID] = rsOldCheck.[Menu ID]
+            'rsc.[Discount Percentage] = rsOldCheck.[Discount Percentage]
+            rsC.[Sent to Kitchen] = rsOldCheck.[Sent to Kitchen]
+            rsC.[Sent to Kitchen Time] = rsOldCheck.[Sent to Kitchen Time]
+            rsC.[Fire Requested] = rsOldCheck.[Fire Requested]
+            rsC.[Fired Ack] = rsOldCheck.[Fired Ack]
+            rsC.[Current Course] = rsOldCheck.[Current Course]
+            rsC.[Special Instructions] = rsOldCheck.[Special Instructions]
+            gToCheck = rsC.[Check Number]
+        Else
+            rsC.[Menu ID] = wMenuID
+            gCurrentCheck = rsC.[Check Number]
+        End If
+        rsC.Update
+        If saveError <> "3022" Then
+            Exit Do
+        End If
+        errctr = errctr + 1
+    Loop
+    rsC.Close
+        
+    If errctr = 2000 Then
+        Call DisplayMessage("CheckNCrt", False)
+        gCurrentCheck = 0
+    Else
+        If NewOrSplit = "New" Then
+            gChkNbrGuests = 0
+            If Not gBarScreen Then
+                gCancelButton = False
+                frmAssignTable.Show vbModal   ' assign table(s) and # of guests
+                If gCancelButton Then        ' if user hit cancel on table assign scrn, delete new check
+                    strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+                    Set rsC = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+                    rsC.MoveFirst
+                    If Not rsC.EOF Then
+                        rsC.Delete
+                    End If
+                    If gOrdEntCalledFrm <> "frmOrdersEmp" And gOrdEntCalledFrm <> "frmBar" Then
+                        gLoggedIn = False
+                        gLoggedInEmp = 0
+                    End If
+                    frmMainMenu.lblStaff = ""
+                Else
+                    frmOrderEntry.Show      ' else, show order details screen for new check
+                End If
+            Else
+                strSQL = "INSERT INTO [Check Tables] ([Table ID], [Check Number], [Primary Table]) " _
+                    & "VALUES(""_Lounge"", " & gCurrentCheck & ", True)"
+                gDB.Execute strSQL
+            End If
+        End If
+     End If
+'End If
+    
+    Exit Sub
+ErrorHandler:
+    If Err.Number = 3022 Then  ' duplicate key error
+        saveError = "3022"
+    End If
+    Resume Next
+
+End Sub
+Public Sub subSend()
+    On Error GoTo ErrorHandler
+    
+    Dim tyme, rs: Dim sent As Boolean
+    tyme = Time()
+    
+    strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    Set rsC = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    rsC.MoveFirst
+    If Not rsC.EOF Then sent = rsC.[Sent to Kitchen]
+    rsC.Close
+    
+    'print the order
+    'new order or new item(s)?  set HdrMsg.  if new item, prefix with "*" in createprint.
+    strSQL = "SELECT Count([Check Items].[Check Number]) AS cnt " _
+        & "FROM [Item Categories] INNER JOIN (Items INNER JOIN [Check Items] " _
+        & "ON Items.[Item Number] = [Check Items].[Item Number]) " _
+        & "ON [Item Categories].Category = Items.[Item Category] " _
+        & "HAVING ([Item Categories].[Print on Order]=True " _
+        & "AND [Check Items].[Sent to Kitchen]=False " _
+        & "AND [Check Items].[Dont Make]<>True " _
+        & "AND [Check Items].[Hold Item]<>True " _
+        & "AND [Check Items].Deleted=False " _
+        & "AND [Check Items].[Check Number] = " & gCurrentCheck & ")"
+    Set rsCI = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If rsCI.cnt > 0 Then
+        strSQL = "SELECT * FROM Printers WHERE [Order Printer]"
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        Do While Not rs.EOF
+            If Not sent Then
+                Call modCreatePrint.CrtPrt("Order", gCurrentCheck, 0, 0, "               NEW ORDER")
+            Else
+                Call modCreatePrint.CrtPrt("OrdNewItm", gCurrentCheck, 0, 0, "           !!! NEW ITEM(S) !!!")
+            End If
+            Call modPrint.Entry("Order", gPrtSeq, rs.[Device Name])
+            rs.MoveNext
+        Loop
+    End If
+    rsCI.Close
+    
+    strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    Set rsC = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    rsC.MoveFirst
+    If Not rsC.EOF Then
+        strSQL = "SELECT Count(*) as cnt FROM [Check Items] ci INNER JOIN ([Items] i " _
+            & "INNER JOIN [Item Categories] ic ON i.[Item Category] = ic.Category) " _
+            & "ON ci.[Item Number] = i.[Item Number] " _
+            & "WHERE Not ci.Deleted And Not ci.[Hold Item] " _
+            & "And ic.[Print on Order] And ci.[Check Number] = " & gCurrentCheck
+        Set rsCI = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        'sent = rsC.[Sent to Kitchen]
+        If rsCI.cnt > 0 Then
+            rsC.Edit
+            If Not rsC.[Sent to Kitchen] Then rsC.[Sent to Kitchen Time] = tyme
+            rsC.[Sent to Kitchen] = True
+            rsC.Update
+            rsC.Close
+        End If
+        rsCI.Close
+        ' update all check items as Sent to Kitchen
+        strSQL = "SELECT * FROM [Check Items] WHERE Not Deleted And Not [Hold Item] " _
+            & "And [Check Number] = " & gCurrentCheck
+        Set rsCI = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        While Not rsCI.EOF
+            rsCI.Edit
+            If Not rsC.[Sent to Kitchen] Then rsC.[Sent to Kitchen Time] = tyme
+            rsCI.[Sent to Kitchen] = True
+            'if course is "immediate", fire item
+            If rsCI.Course = 0 And (IsNull(rsCI.[Fired Time]) Or rsCI.[Fired Time] = "") Then
+                rsCI.Fired = True
+                rsCI.[Fired Time] = tyme
+                rsCI.[Print Fire Slips] = True
+            End If
+            rsCI.Update
+            rsCI.MoveNext
+            'If rsCI.Course = 0 Then
+            'End If
+        Wend
+        rsCI.Close
+        'cmdSend.Enabled = False
+        
+        Call modOrdFunctions.PrintFireSlips(gCurrentCheck)
+    Else
+        Call DisplayMessage("CheckNF", False)
+    End If
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Public Sub PrintFireSlips(ByVal Order As Long)
+    On Error GoTo ErrorHandler
+    Dim prtr, hdrline, strSI As String, minut As String, prtseqs(), itemSeq As Long
+    Dim rs, rs2, rs3, rs4, rs5, rsO, elmt
+    Dim bError As Boolean, Ord4 As String * 4, rmng, n As Integer
+    ReDim prtseqs(0)
+    
+    'strSQL = "SELECT Items.[Print Desc], [Item Modifiers].Description, Printers.[Device Name] " _
+    '    & "FROM ((Printers INNER JOIN ([Prep Stations] INNER JOIN ((([Menu Categories] " _
+    '    & "INNER JOIN [Item Categories] ON [Menu Categories].Category = [Item Categories].Category) " _
+    '    & "INNER JOIN (Items INNER JOIN (Checks INNER JOIN [Check Items] " _
+    '    & "ON Checks.[Check Number] = [Check Items].[Check Number]) " _
+    '    & "ON Items.[Item Number] = [Check Items].[Item Number]) " _
+    '    & "ON [Item Categories].Category = Items.[Item Category]) INNER JOIN [Menu Cat Prep Stns] " _
+    '    & "ON ([Item Categories].Category = [Menu Cat Prep Stns].Category) " _
+    '    & "AND ([Menu Categories].Category = [Menu Cat Prep Stns].Category) " _
+    '    & "AND ([Menu Categories].[Menu ID] = [Menu Cat Prep Stns].[Menu ID])) " _
+    '    & "ON [Prep Stations].[Prep Station Number] = [Menu Cat Prep Stns].[Prep Station Number]) " _
+    '    & "ON Printers.[Printer Number] = [Prep Stations].[Printer 1 Number] " _
+    '    & "OR Printers.[Printer Number] = [Prep Stations].[Printer 2 Number])" _
+    '    & "LEFT JOIN [Check Items Modifiers] " _
+    '    & "ON (Checks.[Check Number] = [Check Items Modifiers].[Check Number]) " _
+    '    & "AND ([Check Items].Sequence = [Check Items Modifiers].Sequence) " _
+    '    & "AND ([Check Items].[Check Number] = [Check Items Modifiers].[Check Number])) " _
+    '    & "LEFT JOIN [Item Modifiers] ON [Check Items Modifiers].[Modifier Number] = " _
+    '    & "[Item Modifiers].[Modifier Number] " _
+    '    & "Where ((([Check Items].[Print Fire Slips]) = True) And (([Check Items].Deleted) <> True) " _
+    '    & "And ((Checks.[Check Number]) = " & Order & ")) " _
+    '    & "ORDER BY Printers.[Device Name], [Check Items].[Item Number], " _
+    '    & "[Check Items Modifiers].[Modifier Number]"
+    'strSQL = "SELECT Items.[Print Desc], Printers.[Device Name], Printers.[Printer Number], " _
+    '    & "[Check Items].Sequence as itemseq, [Menu Categories].Category as cat " _
+    '    & "FROM ((Items INNER JOIN [Check Items] ON Items.[Item Number] = [Check Items].[Item Number]) " _
+    '    & "INNER JOIN [Menu Categories] ON Items.[Item Category] = [Menu Categories].Category) " _
+    '    & "INNER JOIN (Printers INNER JOIN ([Menu Cat Prep Stns] INNER JOIN [Prep Stations] " _
+    '    & "ON [Menu Cat Prep Stns].[Prep Station Number] = [Prep Stations].[Prep Station Number]) " _
+    '    & "ON Printers.[Printer Number] = [Prep Stations].[Printer 1 Number]) " _
+    '    & "ON ([Menu Categories].Category = [Menu Cat Prep Stns].Category) " _
+    '    & "AND ([Menu Categories].[Menu ID] = [Menu Cat Prep Stns].[Menu ID]) " _
+    '    & "Where ([Check Items].[Check Number] = " & Order _
+    '    & " And [Check Items].[Print Fire Slips] = True " _
+    '    & "And [Check Items].Deleted = False) " _
+    '    & "ORDER BY Printers.[Device Name], [Check Items].Sequence"
+    strSQL = "SELECT Items.[Print Desc], Printers.[Device Name], [Check Items].Sequence, " _
+        & "[Check Items].[Fired Time], [Check Items].DivideIn2, [Check Items].[Special Instructions] " _
+        & "FROM (Items INNER JOIN ([Routing Fire Slips] INNER JOIN Printers " _
+        & "ON [Routing Fire Slips].[Printer Number] = Printers.[Printer Number]) " _
+        & "ON Items.[Item Category] = [Routing Fire Slips].[Menu Category]) " _
+        & "INNER JOIN [Check Items] ON Items.[Item Number] = [Check Items].[Item Number] " _
+        & "Where (([Check Items].[Check Number] = " & Order _
+        & ") And ([Check Items].[Print Fire Slips] = True) " _
+        & "And ([Routing Fire Slips].[Computer Name] = """ & gWSName & """)) " _
+        & "GROUP BY Items.[Print Desc], Printers.[Device Name], [Check Items].Sequence, " _
+        & "[Check Items].[Fired Time], [Check Items].DivideIn2, [Check Items].[Special Instructions] " _
+        & "ORDER BY Printers.[Device Name], [Check Items].Sequence"
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    
+    ' save the printer name for level break comparison
+    If Not rs.EOF Then
+        prtr = rs.[Device Name]
+    Else
+        rs.Close
+        Exit Sub
+    End If
+    
+   'Do While Not rs.EOF
+    
+    ' get next Print Sequence number
+    strSQL = "SELECT * FROM [System Values] WHERE Active"
+    Do
+        bError = False
+        Set rs2 = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        rs2.MoveFirst
+        rs2.Edit
+        rs2.[Print Seq] = rs2.[Print Seq] + 1
+        gPrtSeq = rs2.[Print Seq]
+        rs2.Update
+        rs2.Close
+    Loop While bError
+    prtseqs(0) = gPrtSeq
+    
+    ' open Print Output file and write title line
+    Set rsO = gDB.OpenRecordset("Print Output", dbOpenDynaset)
+    rsO.AddNew
+    rsO.[Print Seq] = gPrtSeq
+    rsO.[Device Name] = rs.[Device Name]
+    rsO.Output = "               FIRE / MAKE"
+    rsO.Update
+    rsO.AddNew   'blank line
+    rsO.[Print Seq] = gPrtSeq
+    rsO.[Device Name] = rs.[Device Name]
+    rsO.Update
+    
+    ' create the header line text: Emp name, Table, Order#, Order created time
+    strSQL = "SELECT * FROM [Checks] WHERE [Check Number] = " & Order
+    Set rs2 = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    Ord4 = CStr(Order)
+    strSQL = "SELECT * FROM Employees WHERE [Employee Number] = " & rs2.[Server Number]
+    Set rs3 = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    strSQL = "SELECT * FROM [Check Tables] WHERE [Primary Table]" _
+        & " And [Check Number] = " & Order
+    Set rs4 = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    minut = DatePart("n", rs.[Fired Time])
+    If Len(minut) = 0 Then
+        minut = "00"
+    ElseIf Len(minut) = 1 Then
+        minut = "0" & minut
+    End If
+    minut = RTrim(minut)
+    If rs4.RecordCount > 0 Then
+        hdrline = rs3.[Display Name] & Space(20 - Len(rs3.[Display Name])) & rs4.[Table ID] _
+            & Space(10 - Len(rs4.[Table ID])) & Ord4 & " " & DatePart("h", rs.[Fired Time]) _
+            & ":" & minut ' DatePart("n", rs.[Fired Time])
+    Else
+        hdrline = rs3.[Display Name] & Space(30 - Len(rs3.[Display Name])) _
+            & Ord4 & " " & DatePart("h", rs.[Fired Time]) _
+            & ":" & minut ' DatePart("n", rs.[Fired Time])
+    End If
+    'If rs4.RecordCount > 0 Then
+    '    hdrline = rs3.[Display Name] & Space(20 - Len(rs3.[Display Name])) & rs4.[Table ID] _
+    '        & Space(10 - Len(rs4.[Table ID])) & Ord4 & " " & DatePart("h", rs2.[Time Created]) _
+    '        & ":" & DatePart("n", rs2.[Time Created])
+    'Else
+    '    hdrline = rs3.[Display Name] & Space(30 - Len(rs3.[Display Name])) _
+    '        & Ord4 & " " & DatePart("h", rs2.[Time Created]) _
+    '        & ":" & DatePart("n", rs2.[Time Created])
+    'End If
+    'hdrline = rs3.[Display Name] & Space(20 - Len(rs3.[Display Name])) & rs4.[Table ID] _
+    '    & Space(10 - Len(rs4.[Table ID])) & Ord4 & " " & DatePart("h", rs2.[Time Created]) _
+    '    & ":" & DatePart("n", rs2.[Time Created])
+    rs2.Close: rs3.Close: rs4.Close
+    ' write the header line
+    rsO.AddNew
+    rsO.[Print Seq] = gPrtSeq
+    rsO.[Device Name] = rs.[Device Name]
+    rsO.Output = hdrline
+    rsO.Update
+    rsO.AddNew   'blank line
+    rsO.[Print Seq] = gPrtSeq
+    rsO.[Device Name] = rs.[Device Name]
+    rsO.Update
+    
+    ' write the items and mods line(s)
+    Do While Not rs.EOF
+        If prtr <> rs.[Device Name] Then   'new printer found; send to print
+            rsO.Update
+            itemSeq = 0
+            ' get next Print Sequence number
+            strSQL = "SELECT * FROM [System Values] WHERE Active"
+            Do
+                bError = False
+                Set rs2 = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+                rs2.MoveFirst
+                rs2.Edit
+                rs2.[Print Seq] = rs2.[Print Seq] + 1
+                gPrtSeq = rs2.[Print Seq]
+                rs2.Update
+                rs2.Close
+            Loop While bError
+            ReDim Preserve prtseqs(UBound(prtseqs) + 1)
+            prtseqs(UBound(prtseqs)) = gPrtSeq
+            prtr = rs.[Device Name]
+            
+            ' write title records for the next slip
+            rsO.AddNew
+            rsO.[Print Seq] = gPrtSeq
+            rsO.Output = "               FIRE / MAKE"
+            rsO.[Device Name] = rs.[Device Name]
+            rsO.Update
+            rsO.AddNew   'blank line
+            rsO.[Print Seq] = gPrtSeq
+            rsO.[Device Name] = rs.[Device Name]
+            rsO.Update
+            ' write the header lines
+            rsO.AddNew
+            rsO.[Print Seq] = gPrtSeq
+            rsO.[Device Name] = rs.[Device Name]
+            rsO.Output = hdrline
+            rsO.Update
+            rsO.AddNew   'blank line
+            rsO.[Print Seq] = gPrtSeq
+            rsO.[Device Name] = rs.[Device Name]
+            rsO.Update
+        
+        End If
+        'Else
+            If itemSeq <> rs.Sequence Then    'new item found
+                itemSeq = rs.Sequence         ' save new item number
+                rsO.Update
+                rsO.AddNew
+                rsO.[Print Seq] = gPrtSeq
+                rsO.[Device Name] = rs.[Device Name]
+                rsO.Output = UCase(rs.[Print Desc])
+                rmng = 40 - Len(rs.[Print Desc]) + 1
+            
+                ' Divide into 2 portions?
+                If rs.DivideIn2 Then
+                    rsO.Output = rsO.Output & " Divide in 2"
+                    rsO.Update
+                    rsO.AddNew
+                    rmng = 40
+                End If
+                
+                strSQL = "SELECT * FROM [Check Items Modifiers] WHERE [Check Number] = " & Order _
+                    & " And [Sequence] = " & rs.Sequence
+                Set rs4 = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+                rs4.MoveFirst
+                ' write all item's modifier descriptions
+                Do While Not rs4.EOF
+                    strSQL = "SELECT * FROM [Item Modifiers] WHERE [Modifier Number] = " & rs4.[Modifier Number]
+                    Set rs5 = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+                    If Len(rs5.Description) > rmng Then
+                        rsO.Update
+                        rsO.AddNew
+                        rsO.[Print Seq] = gPrtSeq
+                        rsO.[Device Name] = rs.[Device Name]
+                        rsO.Output = rs5.Description
+                        rmng = 40 - Len(rs5.Description) + 1
+                    Else
+                        rsO.Output = rsO.Output & " " & rs5.Description
+                        rmng = rmng - Len(rs5.Description) + 1
+                    End If
+                    rs5.Close
+                    rs4.MoveNext
+                Loop
+                rs4.Close
+                rsO.Update ' attempt to update. if not rs.addnew, error will be trapped
+            End If
+            If Not IsNull(rs.[Special Instructions]) And rs.[Special Instructions] <> "" Then
+                strSI = RTrim(rs.[Special Instructions])
+                Do While Len(strSI) > 0
+                    rsO.AddNew
+                    rsO.[Print Seq] = gPrtSeq
+                    rsO.Output = fncStr40(strSI)
+                    rsO.Update
+                Loop
+            End If
+        rs.MoveNext
+    Loop
+    rsO.Update
+    
+    n = 0
+    For Each elmt In prtseqs
+        gPrtSeq = prtseqs(n)
+        Call modPrint.Entry("Fire", gPrtSeq, prtr)
+        n = n + 1
+    Next elmt
+    
+    gDB.Execute "UPDATE [Check Items] SET [Print Fire Slips] = False WHERE [Check Number] = " & Order
+    
+    Exit Sub
+ErrorHandler:
+    bError = True
+    Resume Next
+End Sub
+Public Sub subPrintOrder(CheckNo As Long)
+    'On Error GoTo ErrorHandler
+
+    'DataEnv1.cmd40Col (CheckNo)
+    'rpt40Col.Show
+    
+    'Exit Sub
+'ErrorHandler:
+    'Resume Next
+End Sub
+Public Sub subPrintCheck(CheckNo As Long)
+    On Error GoTo ErrorHandler
+    Dim rs, rsChk, rsChkI, rsSysV
+    Dim rmng As Integer, bError As Boolean, prtr As String
+    
+    ' check for unfired items
+    If Not gBarScreen Then
+        strSQL = "SELECT Count(*) as cnt FROM [Check Items] as a WHERE [Check Number] = " & gCurrentCheck _
+            & " And (Not [Sent to Kitchen] Or Not [Fired]) And Not [Deleted]"
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        If rs.cnt > 0 Then
+            Call DisplayMessage("UnSntUnFrdItems", False)
+            rs.Close
+            Exit Sub
+        Else
+            rs.Close
+        End If
+    End If
+    ' if kitchen monitor is used, check for unserved items
+    'strSQL = "SELECT * FROM [System Values] WHERE [Active] And [Kitchen Screen]"
+    'Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    'If Not rs.EOF Then
+     If gKitMon And Not gBarScreen Then
+        strSQL = "SELECT count(*) as cnt FROM [Item Categories] as ic " _
+            & "INNER JOIN (Items as i INNER JOIN [Check Items] as ci ON i.[Item Number] = " _
+            & "ci.[Item Number]) ON ic.Category = i.[Item Category] " _
+            & "WHERE ci.Fired=True AND ci.Served=False AND ci.Deleted=False AND ic.[Kitchen Screen]=True " _
+            & "And ci.[Check Number] = " & CheckNo
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        If rs.cnt > 0 Then
+            Call DisplayMessage("UnservedItems", False)
+            Exit Sub
+        End If
+        rs.Close
+    End If
+    
+    ' update the check totals, just to be sure
+    Call subUpdChkTotals
+    
+    ' create and print the check
+    Call modCreatePrint.CrtPrt("Check", CheckNo, 0, 0, "")
+    gCancelButton = False
+    If Not gCancelButton Then
+        strSQL = "SELECT * FROM [Printers] WHERE [Printer Number] = " & gChkPrtr
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        If Not rs.EOF Then prtr = rs.[Device Name]
+        rs.Close
+        Call modPrint.Entry("Check", gPrtSeq, prtr)
+        'Call modPrint.Entry("Check", gPrtSeq, prtr)
+        
+        gDB.Execute ("UPDATE Checks SET [Check Printed] = True WHERE [Check Number] = " & CheckNo)
+        'gCancelButton = False
+        
+        Call DisplayMessage("CheckPrinted", False)
+    End If
+    
+    Exit Sub
+ErrorHandler:
+    bError = True
+    Resume Next
+End Sub
+
+Public Sub subUpdChkTotals()
+    On Error Resume Next
+    
+    Dim rs ', rs2, elmt
+    Dim bDiscPct As Byte
+    Dim sDiscPct As Single
+    'Dim cats(), saveCat As Long
+    'Dim catsTotal, iPriceTotal, iDiscTotal, iNotDiscTotal, cDiscAmount, taxTotal As Double
+    Dim iIPriceTotal, iPriceTotal, iDiscTotal, taxTotal, paidTotal, tipTotal, CIChkDisctdAmt, CIItmDisctdAmt As Double
+    'Dim tax, tax1(), tax2(), tax3(), tax4(), tax5(), cDiscPercent As Single
+    'Dim n As Integer
+    
+    'total items charges and discounts (iTotal, iDiscTotal)
+    'strSQL = "SELECT Sum([Price]) as iprice, Sum([Discount Amount]) as idisc " _
+    '    & "FROM [Check Items] WHERE [Check Number] = " & CLng(gCurrentCheck) _
+    '    & " WHERE Not [Deleted] And Not [Complimentary Item]"
+    'Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    'If Not rs.EOF Then
+    '    iTotal = rs.iprice
+    '    iDiscTotal = rs.idisc
+    'End If
+    'rs.Close
+    
+    'get Check level discount, if present (cDiscAmount, cDiscPercent)
+    'strSQL = "SELECT * FROM Checks WHERE [Check Number] = & " & gCurrentCheck
+    'Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    'If Not rs.EOF Then
+    '    If rs.[Discount Amount] <> 0 Or rs.[Discount Percentage] <> 0 Then
+    '        cDiscAmount = 0
+    '        If Not IsNull(rs.[Discount Amount]) Then cDiscAmount = rs.[Discount Amount]
+    '        If Not IsNull(rs.[Discount Percentage]) Then cDiscPercent = rs.[Discount Percentage]
+    '        rs.Close
+    '        strSQL = "SELECT SUM([Price]) as iNotDiscTotal FROM [Check Items] WHERE [Check Number] = " _
+    '        & CLng(gCurrentCheck) & " WHERE Not [Deleted] And Not [Complimentary Item]" _
+    '        & " And [Discount Amount] = 0 and [Discount Percent] = 0"
+    '        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    '        If Not rs.EOF Then iNotDiscTotal = rs.iNotDiscTotal
+    '        rs.Close
+    '    Else
+    '        rs.Close
+    '    End If
+    'Else
+    '    rs.Close
+    'End If
+    
+    ' this section probably not needed.
+    'get the item categories and their taxes
+    'strSQL = "SELECT ic.Category, ic.TaxRate1, ic.TaxRate2, ic.TaxRate3, ic.TaxRate4, ic.TaxRate5 " _
+    '            & "FROM [Item Categories] ic INNER JOIN (Items INNER JOIN [Check Items] ON " _
+    '            & "Items.[Item Number] = [Check Items].[Item Number]) ON ic.Category = Items.[Item Category] " _
+    '            & "ORDER BY Items.[Item Category]"
+    'Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    'saveCat = 0: n = -1
+    'Do While Not rs.EOF
+    '    If saveCat <> rs.Category Then
+    '        saveCat = rs.Category
+    '        n = n + 1
+    '        ReDim cats(n): ReDim tax1(n): ReDim tax2(n): ReDim tax3(n): ReDim tax4(n): ReDim tax5(n)
+    '        cats(n) = rs.Category
+    '        tax1(n) = 0: tax2(n) = 0: tax3(n) = 0: tax4(n) = 0: tax5(n) = 0
+    '        If Not IsNull(rs.TaxRate1) And rs.TaxRate1 <> 0 Then tax1(n) = rs.TaxRate1 * 0.01 + 1
+    '        If Not IsNull(rs.TaxRate2) And rs.TaxRate2 <> 0 Then tax2(n) = rs.TaxRate2 * 0.01 + 1
+    '        If Not IsNull(rs.TaxRate3) And rs.TaxRate3 <> 0 Then tax3(n) = rs.TaxRate3 * 0.01 + 1
+    '        If Not IsNull(rs.TaxRate4) And rs.TaxRate4 <> 0 Then tax4(n) = rs.TaxRate4 * 0.01 + 1
+    '        If Not IsNull(rs.TaxRate5) And rs.TaxRate5 <> 0 Then tax5(n) = rs.TaxRate5 * 0.01 + 1
+    '    End If
+    '    rs.MoveNext
+    'Loop
+    'rs.Close
+    
+    'calc paid amount
+    paidTotal = 0
+    strSQL = "SELECT SUM(Amount) as paid FROM [Check Payments]" _
+        & " WHERE Not [Tip] And [Check Number] = " & gCurrentCheck
+    'strSQL = "SELECT SUM(Amount) as paid FROM [Check Payments]" _
+    '    & " WHERE ([Payment Method] < 20 and [Auth Number] <> """" or [Payment Method] >= 20)" _
+    '    & " And Not [Tip] And [Check Number] = " & gCurrentCheck
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not IsNull(rs.paid) Then paidTotal = CDbl(rs.paid)
+    rs.Close
+    
+    'calc tip amount
+    tipTotal = 0
+    strSQL = "SELECT SUM(Amount) as paid FROM [Check Payments]" _
+        & " WHERE [Tip] And [Check Number] = " & gCurrentCheck
+    'strSQL = "SELECT SUM(Amount) as paid FROM [Check Payments]" _
+    '    & " WHERE ([Payment Method] < 20 and [Auth Number] <> """" or [Payment Method] >= 20)" _
+    '    & " And [Tip] And [Check Number] = " & gCurrentCheck
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not IsNull(rs.paid) Then tipTotal = CDbl(rs.paid)
+    rs.Close
+    
+    'if a check discount, update all non-comped item prices that don't have item level discounted
+    'No. If check discount, new items will be discounted when added. frmDiscount does the rest.
+    'What this does is sum the Item Prices of items uncomped and without Item Disc, then apply the check
+    ' discount % to that total. That way, we minimize rounding errors.
+    
+   ' 4/06 ****** If applying chk% instead of summing CI.Price, Tax might be off. 4/08 Too bad. ********
+    
+    'strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    'Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    'If Not rs.EOF Then
+    '    If rs.[Discount Percentage] > 0 Then
+    '        bDiscPct = rs.[Discount Percentage]
+    '        sDiscPct = rs.[Discount Percentage] * 0.01
+    '        rs.Close
+    '        strSQL = "SELECT SUM([Item Price]) tot FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+    '            & " And Not [Complimentary Item] And Not [Deleted] And Not [Disc Is Itm Disc]"
+    '        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    '        If Not rs.EOF Then
+    '            If IsNumeric(rs.tot) Then CIChkDisctdAmt = MyRound(tot - tot * sDiscPct)
+    '        End If
+    '        rs.Close
+                
+            'strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+            '    & " And Not [Complimentary Item] And Not [Deleted] And Not [Disc Is Itm Disc]"
+            'Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+            'Do While Not rs.EOF
+            '    rs.Edit
+            '    rs.Price = MyRound(rs.[Item Price] - rs.[Item Price] * sDiscPct)
+            '    rs.[Discount Percent] = bDiscPct
+            '    rs.[Disc Is Chk Disc] = True
+            '    rs.Update
+            '    rs.MoveNext
+            'Loop
+            'rs.Close
+    '    Else
+    '        rs.Close
+    '    End If
+    'Else
+    '    rs.Close
+    'End If
+    
+    
+    'calculate Check totals (iPriceTotal, iDiscTotal, taxTotal)
+    iIPriceTotal = 0
+    iPriceTotal = 0
+    iDiscTotal = 0
+    taxTotal = 0
+    strSQL = "SELECT ci.[Item Price], ci.Price, ci.[Discount Amount], ic.TaxRate1, ic.TaxRate2, ic.TaxRate3, " _
+                & "ic.TaxRate4, ic.TaxRate5 " _
+                & "FROM [Item Categories] ic INNER JOIN (Items INNER JOIN [Check Items] ci ON " _
+                & "Items.[Item Number] = ci.[Item Number]) ON ic.Category = Items.[Item Category] " _
+                & "WHERE Not ci.[Deleted] And Not ci.[Complimentary Item] " _
+                & "And Not ci.[Free Refill] And ci.[Check Number] = " & gCurrentCheck
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    Do While Not rs.EOF
+        If Not IsNull(rs.[Item Price]) Then iIPriceTotal = iIPriceTotal + rs.[Item Price]
+        'If Not IsNull(rs.[Discount Amount]) Then iDiscTotal = iDiscTotal + rs.[Discount Amount]
+        If Not IsNull(rs.Price) Then
+            iPriceTotal = iPriceTotal + rs.Price
+            If Not IsNull(rs.TaxRate1) And rs.TaxRate1 <> 0 Then
+                taxTotal = taxTotal + ((rs.TaxRate1 * 0.01) * rs.Price)
+            End If
+            If Not IsNull(rs.TaxRate2) And rs.TaxRate2 <> 0 Then
+                taxTotal = taxTotal + ((rs.TaxRate2 * 0.01) * rs.Price)
+            End If
+            If Not IsNull(rs.TaxRate3) And rs.TaxRate3 <> 0 Then
+                taxTotal = taxTotal + ((rs.TaxRate3 * 0.01) * rs.Price)
+            End If
+            If Not IsNull(rs.TaxRate4) And rs.TaxRate4 <> 0 Then
+                taxTotal = taxTotal + ((rs.TaxRate4 * 0.01) * rs.Price)
+            End If
+            If Not IsNull(rs.TaxRate5) And rs.TaxRate5 <> 0 Then
+                taxTotal = taxTotal + ((rs.TaxRate5 * 0.01) * rs.Price)
+            End If
+        End If
+        rs.MoveNext
+    Loop
+    rs.Close
+    
+    If iPriceTotal > 0 Then iPriceTotal = MyRound(iPriceTotal)
+    'If iDiscTotal > 0 Then iDiscTotal = MyRound(iDiscTotal)
+    If taxTotal > 0 Then taxTotal = MyRound(taxTotal)
+    
+    'get Check level item discounts
+    strSQL = "SELECT SUM([Item Price]) as iptot, SUM([Price]) as ptot " _
+        & " FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+        & " And Not [Complimentary Item] And Not [Deleted] And Not [Disc Is Itm Disc] " _
+        & "And Not [Free Refill]"
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not rs.EOF Then
+        CIChkDisctdAmt = MyRound(rs.iptot - rs.ptot)
+    End If
+    rs.Close
+    
+    'get Item level item discounts
+    strSQL = "SELECT SUM([Item Price]) as iptot, SUM([Price]) as ptot " _
+        & " FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+        & " And Not [Complimentary Item] And Not [Deleted] And [Disc Is Itm Disc] " _
+        & "And Not [Free Refill]"
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not rs.EOF Then
+        If Not IsNull(rs.iptot) And Not IsNull(rs.ptot) Then CIItmDisctdAmt = MyRound(rs.iptot - rs.ptot)
+    End If
+    rs.Close
+    
+    'update Check amounts
+    Dim updError As Boolean
+    On Error GoTo ErrorHandler
+    strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    Do
+        updError = False
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        If Not rs.EOF Then
+            rs.Edit
+            rs.[Check Subtotal] = iIPriceTotal
+            rs.[Chk Lvl Discs] = CIChkDisctdAmt
+            rs.[Item Lvl Discs] = CIItmDisctdAmt
+            rs.[Discounted Subtotal] = iPriceTotal - rs.[Chk Dollar Discount]
+            rs.[Tax] = taxTotal
+            'rs.[Check Total] = iPriceTotal + taxTotal
+            If Not rs.[Check Comped] Then
+                If rs.[Bar Check] Then
+                    Dim ct As Double
+                    ct = rs.[Discounted Subtotal] + taxTotal
+                    rs.[Check Total] = RoundBarTtl(ct)
+                Else
+                    rs.[Check Total] = rs.[Discounted Subtotal] + taxTotal
+                End If
+            Else
+                rs.[Check Total] = 0
+            End If
+            rs.[Paid Amount] = paidTotal
+            rs.[Tip] = tipTotal
+            rs.Update
+            rs.Close
+        Else
+            rs.Close
+            Error (31036)
+        End If
+    Loop While updError
+    
+    Exit Sub
+ErrorHandler:
+    updError = True
+    gdlgMsgboxButtons = 1
+    gMsgboxMsg = "Error: could not update order totals.  Another user might have the order locked."
+    gMsgboxHint = "Press OK to retry.  Press Cancel to try again later."
+    gdlgMsgboxRtnVal = 0
+    dlgMsgbox.Show vbModal
+    If gdlgMsgboxRtnVal = vbCancel Then
+        gCancelButton = True
+        Exit Sub
+    Else
+        Resume Next
+    End If
+    
+End Sub
+Public Sub subSetNumGuests(OrdNo As Long)  ' sets number of guests based on unique Persons on check items file
+    On Error GoTo ErrorHandler
+    Dim rsCItmp, rsCtmp
+    
+    strSQL = "SELECT * FROM [Checks] WHERE [Check Number] = " & OrdNo
+    Set rsCtmp = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    rsCtmp.MoveFirst
+    If Not rsCtmp.EOF Then
+        strSQL = "SELECT Person, [Check Number], Deleted" _
+            & " From [Check Items]" _
+            & " GROUP BY Person, [Check Number], Deleted" _
+            & " HAVING Person <> ""0"" And Person <> """" AND Deleted <> True AND [Check Number] = " & OrdNo
+        Set rsCItmp = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        rsCtmp.Edit
+        rsCtmp.[Number of Guests] = rsCItmp.RecordCount
+        rsCtmp.Update
+    End If
+    rsCtmp.Close
+    rsCItmp.Close
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Public Function fncAnyPayments(CheckNo As Long) As Boolean
+    On Error GoTo ErrorHandler
+
+    Dim rst
+    strSQL = "SELECT * FROM [Check Payments] WHERE [Check Number] = " & CheckNo
+    Set rst = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    rst.MoveLast
+    If rst.RecordCount > 0 Then
+        fncAnyPayments = True
+    Else
+        fncAnyPayments = False
+    End If
+    rst.Close
+    
+    Exit Function
+ErrorHandler:
+    Resume Next
+End Function
+Public Sub DeleteOrder()
+    On Error GoTo ErrorHandler
+    Dim rs, rs2: Dim InTrans As Boolean
+    
+    strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+        & " And Not Deleted And Fired"
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    rs.MoveLast
+    If rs.RecordCount > 0 Then
+        rs.Close
+        strSQL = "SELECT * FROM [Employees] WHERE [Employee Number] = " & gLoggedInEmp
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        If Not rs.EOF Then
+            If Not rs.AdjDiscAuth Then
+                Call DisplayMessage("Unauthorized", False)
+                rs.Close
+                Exit Sub
+            Else
+                rs.Close
+            End If
+        Else
+            Call DisplayMessage("EmpNotFound", False)
+            rs.Close
+            Exit Sub
+       End If
+    Else
+        rs.Close
+    End If
+    
+    gdlgMsgboxButtons = 4
+    gMsgboxMsg = "Are you certain you want to delete this entire order?"
+    gMsgboxHint = "Press Yes to delete, No to keep the order."
+    gdlgMsgboxRtnVal = 0
+    dlgMsgbox.Show vbModal
+    If gdlgMsgboxRtnVal = vbYes Then
+        
+        gRsnObject = "Order": gRsnAction = "Delete"
+        frmSelReason.Show vbModal
+        
+        InTrans = True
+        gWS.BeginTrans
+        gCancelButton = True
+        strSQL = "SELECT * FROM [Check Tables] WHERE [Check Number] = " & gCurrentCheck
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        Do While Not rs.EOF
+        strSQL = "SELECT Count(Checks.[Check Number]) as cnt " _
+            & "FROM Checks INNER JOIN [Check Tables] ON Checks.[Check Number] = " _
+            & "[Check Tables].[Check Number] " _
+            & "WHERE Checks.Open And [Check Tables].[Table ID] = """ & rs.[Table ID] & """"
+            'strSQL = "SELECT * FROM Checks " _
+            '    & "WHERE Open And Not [Check Deleted] And EXISTS(SELECT * FROM [Check Tables] " _
+            '    & "WHERE Checks.[Check Number] = [Check Tables].[Check Number] And " _
+            '    & "[Table ID] = """ & rs.[Table ID] & """)"
+            Set rs2 = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+            If Not rs2.EOF Then
+                If rs2.cnt = 1 Then
+                    strSQL = "UPDATE Tables SET Occupied = False WHERE [Table ID] = """ & rs.[Table ID] & """"
+                    gDB.Execute strSQL
+                End If
+            Else
+                strSQL = "UPDATE Tables SET Occupied = False WHERE [Table ID] = """ & rs.[Table ID] & """"
+                gDB.Execute strSQL
+            End If
+            rs.MoveNext
+        Loop
+        
+        strSQL = "UPDATE [Checks] SET [Check Deleted] = TRUE, Open = FALSE " _
+            & "WHERE [Check Number] = " & gCurrentCheck
+        gDB.Execute strSQL, dbFailOnError
+        'strSQL = "DELETE FROM [Check Tables] WHERE [Check Number] = " & gCurrentCheck
+        'gDB.Execute strSQL, dbFailOnError
+        gWS.CommitTrans
+        InTrans = False
+        rs.Close
+        rs2.Close
+        If gCalledFrom = "frmOrdersEmp" Then Call frmOrdersEmp.LoadOrders("Refresh")
+
+        strSQL = "SELECT Count([Check Items].[Check Number]) AS cnt " _
+            & "FROM [Item Categories] INNER JOIN (Items INNER JOIN [Check Items] " _
+            & "ON Items.[Item Number] = [Check Items].[Item Number]) " _
+            & "ON [Item Categories].Category = Items.[Item Category] " _
+            & "HAVING ([Item Categories].[Print on Order] = True " _
+            & "AND [Check Items].Deleted = False " _
+            & "AND [Check Items].[Dont Make] <> True " _
+            & "AND [Check Items].[Check Number] = " & gCurrentCheck & ")"
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        If rs.cnt > 0 Then
+            gCancelButton = False
+            Call modCreatePrint.CrtPrt("Order", gCurrentCheck, 0, 0, "         !!! ORDER DELETED !!!")
+            If Not gCancelButton Then
+                Call modPrint.Entry("Order", gPrtSeq, "PrtrColdLine1")
+                Call modCreatePrint.CrtPrt("Order", gCurrentCheck, 0, 0, "         !!! ORDER DELETED !!!")
+                Call modPrint.Entry("Order", gPrtSeq, "PrtrHotLine1")
+            End If
+        End If
+        rs.Close
+
+
+    End If
+    Exit Sub
+ErrorHandler:
+    If InTrans Then
+        InTrans = False
+        Call DisplayMessage("UnableToDelete", False)
+        rs.Close
+        rs2.Close
+        Exit Sub
+    End If
+    Resume Next
+End Sub
+Public Sub DeleteItem()
+    On Error GoTo ErrorHandler
+    Dim rs
+    
+    strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+        & " And Sequence = " & gChkItmSeq
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not rs.EOF Then
+        If rs.Fired Then
+            rs.Close
+            strSQL = "SELECT * FROM [Employees] WHERE [Employee Number] = " & gLoggedInEmp
+            Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+            If Not rs.EOF Then
+                If Not rs.AdjDiscAuth Then
+                    Call DisplayMessage("Unauthorized", False)
+                    rs.Close
+                    Exit Sub
+                End If
+            Else
+                Call DisplayMessage("EmpNotFound", False)
+                rs.Close
+                Exit Sub
+            End If
+        Else
+            rs.Close
+        End If
+    Else
+        Call DisplayMessage("ItemNotFound", False)
+        Exit Sub
+    End If
+    
+    gdlgMsgboxButtons = 4
+    gMsgboxMsg = "Are you certain you want to delete this item?"
+    gMsgboxHint = "Press Yes to delete, No to keep the order."
+    gdlgMsgboxRtnVal = 0
+    dlgMsgbox.Show vbModal
+    If gdlgMsgboxRtnVal = vbYes Then
+        gRsnObject = "OrdItem": gRsnAction = "Delete"
+        frmSelReason.Show vbModal
+        strSQL = "UPDATE [Check Items] SET Deleted = True WHERE [Check Number] = " & gCurrentCheck _
+            & " And Sequence = " & gChkItmSeq
+        gDB.Execute strSQL, dbFailOnError
+        If gDB.RecordsAffected < 1 Then
+            Call DisplayMessage("UnableToDelete", False)
+        Else
+            If gCalledFrom = "frmOrderEntry" Then
+                Call frmOrderEntry.LoadCheckItems("Refresh")
+            ElseIf gCalledFrom = "frmOrderItem" Then
+                Unload frmOrderItem
+                If gCICalledFrm = "frmOrderEntry" Then
+                    Call frmOrderEntry.LoadCheckItems("Refresh")
+                ElseIf gCICalledFrm = "frmOrdersEmp" Then
+                    frmOrdersEmp.LoadItems ("Refresh")
+                End If
+            End If
+        End If
+        rs.Close
+    End If
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Public Sub CloseOrder()
+    On Error GoTo ErrorHandler
+    Dim rs, rs2
+    
+    Call modOrdFunctions.subUpdChkTotals
+    strSQL = "SELECT * FROM [Checks] WHERE [Check Number] = " & gCurrentCheck
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    If Not rs.EOF Then
+        If rs.[Paid Amount] < rs.[Check Total] Then
+            Call DisplayMessage("CheckNotPaid", False)
+            rs.Close
+            gCancelButton = True
+            Exit Sub
+        Else
+            'gdlgMsgboxButtons = 1
+            'gMsgboxMsg = "Closing an order will make it's table(s) available."
+            'gMsgboxHint = "Press OK to close order, Cancel to cancel."
+            'gdlgMsgboxRtnVal = 0
+            'dlgMsgbox.Show vbModal
+            'If gdlgMsgboxRtnVal = vbOK Then
+            rs.Close
+            strSQL = "SELECT * FROM [Check Tables] WHERE [Check Number] = " & gCurrentCheck
+            Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+            Do While Not rs.EOF
+                strSQL = "SELECT Count(Checks.[Check Number]) as cnt " _
+                    & "FROM Checks INNER JOIN [Check Tables] ON Checks.[Check Number] = " _
+                    & "[Check Tables].[Check Number] " _
+                    & "WHERE Checks.Open And [Check Tables].[Table ID] = """ & rs.[Table ID] & """"
+                'strSQL = "SELECT * FROM Checks " _
+                '    & "WHERE Open And Not [Check Deleted] And EXISTS(SELECT * FROM [Check Tables] " _
+                '    & "WHERE Checks.[Check Number] = [Check Tables].[Check Number] And " _
+                '    & "[Table ID] = """ & rs.[Table ID] & """)"
+                Set rs2 = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+                If Not rs2.EOF Then
+                    'rs2.MoveLast 'have to do this to get accurate recordcount.
+                    If rs2.cnt = 1 Then
+                        strSQL = "UPDATE Tables SET Occupied = False WHERE [Table ID] = """ & rs.[Table ID] & """"
+                        gDB.Execute strSQL
+                    End If
+                Else
+                    strSQL = "UPDATE Tables SET Occupied = False WHERE [Table ID] = """ & rs.[Table ID] & """"
+                    gDB.Execute strSQL
+                End If
+                rs.MoveNext
+            Loop
+            rs.Close
+        End If
+        strSQL = "UPDATE [Checks] SET [Open] = False WHERE [Check Number] = " & gCurrentCheck
+        gDB.Execute strSQL, dbFailOnError
+        If gDB.RecordsAffected < 1 Then
+            Call DisplayMessage("UnableToUpdate", False)
+            gCancelButton = True
+        Else
+            Call DisplayMessage("OrderClosed", True)
+            gCancelButton = False
+            'If gCalledFrom = "frmOderEntry" Then
+            '    Unload Forms(0)
+            'ElseIf gCalledFrom = "frmOdersEmp" Then
+            '    Call frmOrdersEmp.LoadOrders("Refresh")
+            'End If
+            Call frmOrdersEmp.LoadOrders("Refresh")
+        End If
+    Else
+        Call DisplayMessage("CheckNF", False)
+    End If
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Public Sub TransOrder(Order As Long)
+    On Error GoTo ErrorHandler
+    
+    gCalledFrom = "Transfer"
+    frmSelEmp.Show vbModal
+    If Not gCancelButton And gEmpNum <> 0 Then
+        strSQL = "UPDATE Checks SET [Server Number] = " & gEmpNum & " WHERE [Check Number] = " & Order
+        gDB.Execute strSQL
+        If gDB.RecordsAffected = 1 Then
+            Call DisplayMessage("OrdTrnsfrd", True)
+            Unload frmOrderEntry
+            frmOrdersEmp.LoadOrders ("Refresh")
+        Else
+            Call DisplayMessage("OpFailed", False)
+        End If
+    End If
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Public Function RoundBarTtl(ttl As Double) As Double
+    On Error GoTo ErrorHandler
+    Dim sCents As String, sttl As String
+    
+    ' round check total to nearest $0.25
+    sttl = CStr(CInt(ttl * 100))
+    sCents = Right(sttl, 2)
+    If sCents <> "00" And sCents <> "25" And sCents <> "50" And sCents <> "75" Then
+        If sCents < "25" Then
+            'If 25 - CSng(sCents) < 12.5 Then
+                sCents = "25"
+            'Else
+            '    sCents = "00"
+            'End If
+            sttl = Left(sttl, Len(sttl) - 2) & sCents
+        ElseIf sCents < "50" Then
+            'If 50 - CInt(sCents) < 12.5 Then
+                sCents = "50"
+            'Else
+            '    sCents = "25"
+            'End If
+            sttl = Left(sttl, Len(sttl) - 2) & sCents
+        ElseIf sCents < "75" Then
+            'If 75 - CSng(sCents) < 12.5 Then
+                sCents = "75"
+            'Else
+            '    sCents = "50"
+            'End If
+            sttl = Left(sttl, Len(sttl) - 2) & sCents
+        Else
+            'If 100 - CSng(sCents) < 12.5 Then
+                sCents = "00"
+                sttl = CStr(CInt(sttl) + 100)
+                sttl = Left(sttl, Len(sttl) - 2) & sCents
+            'Else
+            '    sCents = "75"
+            '    sttl = Left(sttl, Len(sttl) - 2) & sCents
+            'End If
+        End If
+        RoundBarTtl = CDbl(sttl) / 100
+    Else
+        RoundBarTtl = ttl
+    End If
+
+    Exit Function
+ErrorHandler:
+    Resume Next
+End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

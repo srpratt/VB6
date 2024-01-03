@@ -1,0 +1,2444 @@
+VERSION 5.00
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Begin VB.Form frmBar 
+   BackColor       =   &H00000000&
+   BorderStyle     =   0  'None
+   ClientHeight    =   11160
+   ClientLeft      =   0
+   ClientTop       =   360
+   ClientWidth     =   15360
+   ControlBox      =   0   'False
+   LinkTopic       =   "Form7"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   14025.41
+   ScaleMode       =   0  'User
+   ScaleWidth      =   15360
+   ShowInTaskbar   =   0   'False
+   Begin VB.Frame Frame4 
+      BackColor       =   &H00000000&
+      Caption         =   "Tabs"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   4815
+      Left            =   240
+      TabIndex        =   64
+      Top             =   4920
+      Width           =   7095
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   9
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   77
+         Top             =   3720
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   8
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   76
+         Top             =   3720
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   7
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   75
+         Top             =   2880
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   6
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   74
+         Top             =   2880
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   5
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   73
+         Top             =   2040
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   4
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   72
+         Top             =   2040
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   3
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   71
+         Top             =   1200
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   2
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   70
+         Top             =   1200
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   1
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   68
+         Top             =   360
+         Width           =   2625
+      End
+      Begin VB.CommandButton cmdTabsDown 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "More Tabs"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   5760
+         Picture         =   "frmBar2g.frx":0000
+         Style           =   1  'Graphical
+         TabIndex        =   67
+         Top             =   2760
+         Width           =   1215
+      End
+      Begin VB.CommandButton cmdTabsUp 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "More Tabs"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   5760
+         Picture         =   "frmBar2g.frx":0442
+         Style           =   1  'Graphical
+         TabIndex        =   66
+         Top             =   1080
+         Width           =   1215
+      End
+      Begin VB.CommandButton cmdTabs 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   0
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   65
+         Top             =   360
+         Width           =   2625
+      End
+   End
+   Begin VB.CommandButton cmdNewTab 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "New Bar Tab"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   855
+      Left            =   3840
+      Style           =   1  'Graphical
+      TabIndex        =   61
+      Top             =   10200
+      Width           =   1695
+   End
+   Begin VB.CommandButton cmdAllChecks 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Work With All Your Orders"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   855
+      Left            =   2040
+      Style           =   1  'Graphical
+      TabIndex        =   60
+      Top             =   10200
+      Width           =   1695
+   End
+   Begin VB.CommandButton cmdNewOrd 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "New Dining Order"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   855
+      Left            =   240
+      Style           =   1  'Graphical
+      TabIndex        =   57
+      Top             =   10200
+      Width           =   1695
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Beer - Bottle"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   0
+      Left            =   120
+      Style           =   1  'Graphical
+      TabIndex        =   25
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Wines"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   1
+      Left            =   1440
+      Style           =   1  'Graphical
+      TabIndex        =   24
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Appetizers"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   2
+      Left            =   2760
+      Style           =   1  'Graphical
+      TabIndex        =   23
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Entrées"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   3
+      Left            =   4080
+      Style           =   1  'Graphical
+      TabIndex        =   22
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Desserts"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   4
+      Left            =   5400
+      Style           =   1  'Graphical
+      TabIndex        =   21
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Mixed Drinks"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   5
+      Left            =   6720
+      Style           =   1  'Graphical
+      TabIndex        =   20
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Beer"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   6
+      Left            =   8040
+      Style           =   1  'Graphical
+      TabIndex        =   19
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Extras"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   7
+      Left            =   9360
+      Style           =   1  'Graphical
+      TabIndex        =   18
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Category 9"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   734
+      Index           =   8
+      Left            =   10680
+      Style           =   1  'Graphical
+      TabIndex        =   17
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCategories 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Category 10"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   9
+      Left            =   12000
+      Style           =   1  'Graphical
+      TabIndex        =   16
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdMoreCats 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "More Categories"
+      Height          =   735
+      Left            =   13440
+      Picture         =   "frmBar2g.frx":0884
+      Style           =   1  'Graphical
+      TabIndex        =   15
+      Top             =   120
+      Width           =   1695
+   End
+   Begin VB.Frame Frame3 
+      BackColor       =   &H00000000&
+      Caption         =   "Items"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   3855
+      Left            =   240
+      TabIndex        =   12
+      Top             =   960
+      Width           =   7095
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   1
+         Left            =   1560
+         Style           =   1  'Graphical
+         TabIndex        =   40
+         Top             =   360
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   2
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   39
+         Top             =   360
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   3
+         Left            =   4200
+         Style           =   1  'Graphical
+         TabIndex        =   38
+         Top             =   360
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H00FF8080&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   5
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   37
+         Top             =   1200
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   6
+         Left            =   1560
+         Style           =   1  'Graphical
+         TabIndex        =   36
+         Top             =   1200
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   7
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   35
+         Top             =   1200
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H00FF8080&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   9
+         Left            =   5520
+         Style           =   1  'Graphical
+         TabIndex        =   34
+         Top             =   1200
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H00FF8080&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   10
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   33
+         Top             =   2040
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   11
+         Left            =   1560
+         Style           =   1  'Graphical
+         TabIndex        =   32
+         Top             =   2040
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   13
+         Left            =   4200
+         Style           =   1  'Graphical
+         TabIndex        =   31
+         Top             =   2040
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H00FF8080&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   14
+         Left            =   5520
+         Style           =   1  'Graphical
+         TabIndex        =   30
+         Top             =   2040
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H00FF8080&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   0
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   29
+         Top             =   360
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H00FF8080&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   4
+         Left            =   5520
+         Style           =   1  'Graphical
+         TabIndex        =   28
+         Top             =   360
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   8
+         Left            =   4200
+         Style           =   1  'Graphical
+         TabIndex        =   27
+         Top             =   1200
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMenuItems 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   825
+         Index           =   12
+         Left            =   2880
+         Style           =   1  'Graphical
+         TabIndex        =   26
+         Top             =   2040
+         Width           =   1300
+      End
+      Begin VB.CommandButton cmdMoreItemsL 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "More Items"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   735
+         Left            =   1560
+         Picture         =   "frmBar2g.frx":0CC6
+         Style           =   1  'Graphical
+         TabIndex        =   14
+         Top             =   3000
+         Width           =   1815
+      End
+      Begin VB.CommandButton cmdMoreItemsR 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "More Items"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   735
+         Left            =   3720
+         Picture         =   "frmBar2g.frx":1108
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         Top             =   3000
+         Width           =   1815
+      End
+   End
+   Begin VB.CommandButton cmdExit 
+      BackColor       =   &H00A8C2E6&
+      Caption         =   "Exit"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   855
+      Left            =   5640
+      Style           =   1  'Graphical
+      TabIndex        =   9
+      Top             =   10200
+      Width           =   1695
+   End
+   Begin VB.Frame Frame2 
+      BackColor       =   &H00000000&
+      Caption         =   "Tab:"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   6735
+      Left            =   7560
+      TabIndex        =   7
+      Top             =   4320
+      Width           =   7575
+      Begin VB.CommandButton cmdRound 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "Add a Round"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   6480
+         Style           =   1  'Graphical
+         TabIndex        =   69
+         Top             =   5640
+         Width           =   975
+      End
+      Begin VB.CommandButton cmdRemove 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "Remove Item"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   6480
+         Style           =   1  'Graphical
+         TabIndex        =   63
+         Top             =   240
+         Width           =   975
+      End
+      Begin VB.CommandButton cmdName 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "Tab Name"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   6480
+         Style           =   1  'Graphical
+         TabIndex        =   62
+         Top             =   1320
+         Width           =   975
+      End
+      Begin MSDataGridLib.DataGrid DataGrid1 
+         Bindings        =   "frmBar2g.frx":154A
+         Height          =   5415
+         Left            =   240
+         TabIndex        =   54
+         Top             =   720
+         Width           =   5895
+         _ExtentX        =   10398
+         _ExtentY        =   9551
+         _Version        =   393216
+         AllowUpdate     =   0   'False
+         BackColor       =   16777215
+         ColumnHeaders   =   0   'False
+         HeadLines       =   1
+         RowHeight       =   49
+         RowDividerStyle =   1
+         FormatLocked    =   -1  'True
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   5
+         BeginProperty Column00 
+            DataField       =   "Description"
+            Caption         =   "Description"
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   "cnt"
+            Caption         =   "cnt"
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column02 
+            DataField       =   "PriceMax"
+            Caption         =   "PriceMax"
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   1
+               Format          =   """$""#,##0.00"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column03 
+            DataField       =   "PriceSum"
+            Caption         =   "PriceSum"
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   1
+               Format          =   """$""#,##0.00"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column04 
+            DataField       =   "Item Number"
+            Caption         =   "Item Number"
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            MarqueeStyle    =   3
+            ScrollBars      =   2
+            AllowRowSizing  =   0   'False
+            AllowSizing     =   0   'False
+            RecordSelectors =   0   'False
+            BeginProperty Column00 
+               ColumnWidth     =   2505.26
+            EndProperty
+            BeginProperty Column01 
+               Alignment       =   1
+               ColumnWidth     =   599.811
+            EndProperty
+            BeginProperty Column02 
+               Alignment       =   1
+               ColumnWidth     =   1005.165
+            EndProperty
+            BeginProperty Column03 
+               Alignment       =   1
+               ColumnWidth     =   1200.189
+            EndProperty
+            BeginProperty Column04 
+               Object.Visible         =   0   'False
+               ColumnWidth     =   1454.74
+            EndProperty
+         EndProperty
+      End
+      Begin VB.CommandButton cmdPrint 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "Print Tab"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   6480
+         Style           =   1  'Graphical
+         TabIndex        =   59
+         Top             =   2400
+         Width           =   975
+      End
+      Begin VB.CommandButton cmdCreateReg 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "Convert to Dining Order"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   6480
+         Style           =   1  'Graphical
+         TabIndex        =   58
+         Top             =   4560
+         Width           =   975
+      End
+      Begin MSAdodcLib.Adodc Adodc1 
+         Height          =   495
+         Left            =   960
+         Top             =   120
+         Visible         =   0   'False
+         Width           =   1200
+         _ExtentX        =   2117
+         _ExtentY        =   873
+         ConnectMode     =   0
+         CursorLocation  =   3
+         IsolationLevel  =   -1
+         ConnectionTimeout=   15
+         CommandTimeout  =   30
+         CursorType      =   3
+         LockType        =   3
+         CommandType     =   1
+         CursorOptions   =   0
+         CacheSize       =   50
+         MaxRecords      =   0
+         BOFAction       =   0
+         EOFAction       =   0
+         ConnectStringType=   1
+         Appearance      =   1
+         BackColor       =   -2147483643
+         ForeColor       =   -2147483640
+         Orientation     =   0
+         Enabled         =   0
+         Connect         =   ""
+         OLEDBString     =   ""
+         OLEDBFile       =   ""
+         DataSourceName  =   ""
+         OtherAttributes =   ""
+         UserName        =   ""
+         Password        =   ""
+         RecordSource    =   ""
+         Caption         =   "Adodc1"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         _Version        =   393216
+      End
+      Begin VB.CommandButton cmdPay 
+         BackColor       =   &H00A8C2E6&
+         Caption         =   "Pay"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Left            =   6480
+         Style           =   1  'Graphical
+         TabIndex        =   49
+         Top             =   3480
+         Width           =   975
+      End
+      Begin VB.Label Label7 
+         BackColor       =   &H00000000&
+         Caption         =   "Balance:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   3120
+         TabIndex        =   56
+         Top             =   6240
+         Width           =   975
+      End
+      Begin VB.Label lblQBal 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         BeginProperty DataFormat 
+            Type            =   1
+            Format          =   """$""#,##0.00"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   2
+         EndProperty
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   4080
+         TabIndex        =   55
+         Top             =   6240
+         Width           =   1575
+      End
+      Begin VB.Label Label5 
+         BackColor       =   &H00000000&
+         Caption         =   "Amount"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   4560
+         TabIndex        =   53
+         Top             =   360
+         Width           =   855
+      End
+      Begin VB.Label Label4 
+         BackColor       =   &H00000000&
+         Caption         =   "Price"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3600
+         TabIndex        =   52
+         Top             =   360
+         Width           =   615
+      End
+      Begin VB.Label Label3 
+         BackColor       =   &H00000000&
+         Caption         =   "Count"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   2760
+         TabIndex        =   51
+         Top             =   360
+         Width           =   735
+      End
+      Begin VB.Label Label2 
+         BackColor       =   &H00000000&
+         Caption         =   "Item"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   50
+         Top             =   360
+         Width           =   615
+      End
+      Begin VB.Label lblQTotal 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         BeginProperty DataFormat 
+            Type            =   1
+            Format          =   """$""#,##0.00"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   2
+         EndProperty
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   1320
+         TabIndex        =   48
+         Top             =   6240
+         Width           =   1575
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00000000&
+         Caption         =   "Tab Total:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   240
+         TabIndex        =   8
+         Top             =   6240
+         Width           =   1095
+      End
+   End
+   Begin VB.Frame Frame1 
+      BackColor       =   &H00000000&
+      Caption         =   "Popular Items"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   3255
+      Left            =   7560
+      TabIndex        =   0
+      Top             =   960
+      Width           =   7575
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   915
+         Index           =   14
+         Left            =   6000
+         Style           =   1  'Graphical
+         TabIndex        =   47
+         Top             =   2280
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   915
+         Index           =   13
+         Left            =   4560
+         Style           =   1  'Graphical
+         TabIndex        =   43
+         Top             =   2280
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   915
+         Index           =   12
+         Left            =   3120
+         Style           =   1  'Graphical
+         TabIndex        =   46
+         Top             =   2280
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   915
+         Index           =   11
+         Left            =   1680
+         Style           =   1  'Graphical
+         TabIndex        =   45
+         Top             =   2280
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   915
+         Index           =   10
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   44
+         Top             =   2280
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   9
+         Left            =   6000
+         Style           =   1  'Graphical
+         TabIndex        =   42
+         Top             =   1320
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   8
+         Left            =   4560
+         Style           =   1  'Graphical
+         TabIndex        =   41
+         Top             =   1320
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   7
+         Left            =   3120
+         Style           =   1  'Graphical
+         TabIndex        =   11
+         Top             =   1320
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   6
+         Left            =   1680
+         Style           =   1  'Graphical
+         TabIndex        =   10
+         Top             =   1320
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   5
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   6
+         Top             =   1320
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   4
+         Left            =   6000
+         Style           =   1  'Graphical
+         TabIndex        =   5
+         Top             =   360
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   3
+         Left            =   4560
+         Style           =   1  'Graphical
+         TabIndex        =   4
+         Top             =   360
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FF80&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   2
+         Left            =   3120
+         Style           =   1  'Graphical
+         TabIndex        =   3
+         Top             =   360
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   1
+         Left            =   1680
+         Style           =   1  'Graphical
+         TabIndex        =   2
+         Top             =   360
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdQuick 
+         BackColor       =   &H0080C0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   975
+         Index           =   0
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   1
+         Top             =   360
+         Width           =   1485
+      End
+   End
+End
+Attribute VB_Name = "frmBar"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+Public LoadDir, miscDesc, miscSI As String
+Public seq, CurrentCat, Item0, PriorItem0, BarCheck, saveCheck, subcat As Long
+Dim CatKeys(), ItemID(), QItemID(), QCat() As Long
+Dim QPrice(), miscPrice As Double
+Dim ctr, ctr2, elmt, SetToIdx As Variant
+Dim MoreItemsL, MoreItemsR, InSubCat, misc, CheckAdded, LogOut As Boolean
+'Public gCurrentCheck As Long
+
+Public Sub Form_Load()
+    On Error GoTo eh
+    
+    gCancelButton = False
+    gBarScreen = True
+    ReDim CatKeys(cmdCategories.Count - 1)
+    ReDim ItemID(cmdMenuItems.Count - 1)
+    ReDim QItemID(cmdQuick.Count - 1)
+    ReDim QPrice(cmdQuick.Count - 1)
+    ReDim QCat(cmdQuick.Count - 1)
+    
+   'create new bar check
+    If gCurrentCheck = 0 Then
+        modOrdFunctions.CreateCheck ("New")
+        BarCheck = gCurrentCheck
+        CheckAdded = True
+    Else
+        CheckAdded = False
+    End If
+    strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    Set rsC = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    rsC.MoveFirst
+    If Not rsC.EOF Then gMenuID = rsC.[Menu ID]
+    rsC.Close
+    
+    Call LoadMenuCats(gMenuID, False)  ' load first page of menu cats and items
+    CurrentCat = CatKeys(0)
+    LoadPops
+    LogOut = True
+    
+    Exit Sub
+eh:
+    Resume Next
+End Sub
+Private Sub Form_Activate()
+    On Error Resume Next
+    If Not gCancelButton Then RefreshGrid
+    If gRtnCode = "Paid" Then cmdQClose_Click
+    gRtnCode = ""
+    gBarScreen = True
+    cmdCategories(0).SetFocus
+    'If saveCheck <> 0 Then
+    '    gCurrentCheck = saveCheck
+    '    saveCheck = 0
+    'End If
+    'gCurrentCheck = BarCheck
+    'Frame2.Caption = "Quick Sales Check # " & gCurrentCheck
+    strSQL = "SELECT [Special Instructions] FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    Set rsC = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    rsC.MoveFirst
+    If rsC.EOF = False Then
+        If rsC.[Special Instructions] <> "" Then
+            frmBar.Frame2.Caption = "Tab: " & Trim(Left(rsC.[Special Instructions], 30))
+        Else
+            frmBar.Frame2.Caption = "Tab: " & gCurrentCheck
+        End If
+    Else
+        frmBar.Frame2.Caption = "Tab: " & gCurrentCheck
+    End If
+    rsC.Close
+    
+End Sub
+Public Sub RefreshGrid()
+    On Error GoTo eh
+    Dim i As Integer, rs
+    
+    Adodc1.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" _
+        & DBPath & ";Persist Security Info=False"
+    Adodc1.RecordSource = "SELECT Items.Description, Count(Items.[Item Number]) AS cnt, " _
+        & "Max([Check Items].Price) AS PriceMax, Sum([Check Items].Price) AS PriceSum, Items.[Item Number] " _
+        & "FROM Items INNER JOIN [Check Items] ON Items.[Item Number] = [Check Items].[Item Number] " _
+        & "WHERE [Check Items].[Check Number] = " & gCurrentCheck _
+        & " GROUP BY Items.Description, Items.[Item Number]"
+    Adodc1.Refresh
+
+    ' update and retrieve check total
+    strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    rs.MoveFirst
+    If Not rs.EOF Then modOrdFunctions.subUpdChkTotals
+    rs.Close
+    strSQL = "SELECT [Check Total], [Paid Amount] FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    rs.MoveFirst
+    If Not rs.EOF Then
+        lblQTotal = Format(rs.[Check Total], "$###,##0.00")
+        lblQBal = Format(rs.[Check Total] - rs.[Paid Amount], "$###,##0.00")
+    Else
+        lblQTotal = Format(0, "$###,##0.00")
+        lblQBal = Format(0, "$###,##0.00")
+    End If
+    rs.Close
+            
+    DataGrid1.Refresh
+    
+    Exit Sub
+eh:
+    Resume Next
+End Sub
+Private Sub cmdRemove_Click()
+    On Error GoTo ErrorHandler
+    Dim dataError As Boolean, rs
+    
+    If lblQTotal = "$0.00" Then
+        Call DisplayMessage("OrdEmpty", True)
+        Exit Sub
+    End If
+    
+    If DataGrid1.Columns(4).Value <> "" Then
+        strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+            & " And [Item Number] = " & CLng(DataGrid1.Columns(4).Value) _
+            & " ORDER BY Sequence DESC"
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        rs.MoveFirst
+        If Not rs.EOF Then rs.Delete
+        rs.Close
+        'RefreshGrid
+        strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & BarCheck _
+            & " AND Deleted <> TRUE"
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        rs.MoveLast
+        If rs.RecordCount = 0 Then gCurrentCheck = 0
+        rs.Close
+        LogOut = False
+        Unload Me
+        frmBar.Show
+        Me.cmdRemove.Visible = False
+        Me.cmdRemove.Visible = True
+        Exit Sub
+    End If
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Private Sub cmdCreateReg_Click()
+    On Error GoTo eh
+    Dim menu As Long, rs
+    
+    If lblQTotal = "$0.00" Then
+        Call DisplayMessage("OrdEmpty", True)
+        Exit Sub
+    End If
+    
+    strSQL = "SELECT [Menu ID] FROM Checks WHERE Not [Bar Check] And Not [Check Deleted] " _
+        & "ORDER BY [Check Number] DESC"
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not rs.EOF Then menu = rs.[Menu ID]
+    rs.Close
+    strSQL = "UPDATE Checks SET [Bar Check] = False, [Menu ID] = " & menu _
+        & " WHERE [Check Number] = " & gCurrentCheck
+    gDB.Execute strSQL
+    frmOrderEntry.Show
+    Unload Me
+    
+    Exit Sub
+eh:
+    Resume Next
+End Sub
+Private Sub cmdPay_Click()
+    On Error GoTo eh
+    
+    If lblQBal = "$0.00" Then
+        Call DisplayMessage("NothingToPay", True)
+        Exit Sub
+    End If
+    
+    gPayCalledFrm = "frmBar"
+    gRtnCode = ""
+    frmPaymentDtl.Show vbModal
+    gPayCalledFrm = ""
+    
+    Exit Sub
+eh:
+    Resume Next
+End Sub
+Private Sub cmdPrint_Click()
+    
+    If lblQTotal = "$0.00" Then
+        Call DisplayMessage("OrdEmpty", True)
+    Else
+        Call modOrdFunctions.subPrintCheck(CLng(gCurrentCheck))
+    End If
+    
+End Sub
+Private Sub cmdName_Click()
+    On Error GoTo ErrorHandler
+    
+    gKBCalledFrom = "frmBar"
+    frmKeyboard.Show vbModal
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Private Sub cmdQClose_Click()
+    On Error GoTo ErrorHandler
+    
+    If lblQBal <> "$0.00" Then
+        Call DisplayMessage("CheckNotPaid", True)
+        Exit Sub
+    End If
+    If lblQTotal = "$0.00" Then
+        Call DisplayMessage("OrdEmpty", True)
+        Exit Sub
+    End If
+    
+    strSQL = "UPDATE Checks SET Open = False, [Time Closed] = Now WHERE [Check Number] = " & gCurrentCheck
+    gDB.Execute strSQL
+    frmOrdersEmp.LoadOrders "Refresh"
+    LogOut = False
+    Unload Me
+    gCurrentCheck = 0
+    'Me.Form_Load
+    frmBar.Show
+    'Me.Refresh
+       'create new bar check
+    'modOrdFunctions.CreateCheck ("New")
+    'BarCheck = gCurrentCheck
+    'CheckAdded = True
+    'strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    'Set rsC = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    'rsC.MoveFirst
+    'If Not rsC.EOF Then gMenuID = rsC.[Menu ID]
+    'rsC.Close
+
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Private Sub cmdMenuItems_Click(Index As Integer)
+    ' add an item to the check
+    On Error GoTo ErrorHandler
+    Dim rs, rs2: Dim cat As Long, misc As Boolean
+    
+    ' miscellaneous item?
+    If cmdMenuItems(Index).Caption = "Miscellaneous Item" Then
+        miscDesc = ""
+        miscPrice = 0
+        miscSI = ""
+        misc = True
+        gCalledFrom = "frmOrderEntry"
+        frmMiscItem.Show vbModal
+        If gCancelButton Then
+           misc = False
+           gCancelButton = False
+           Exit Sub
+        End If
+    End If
+    
+    If InSubCat And Not misc Then
+        subcat = CLng(ItemID(Index))
+        Call LoadItemButtons("Forward", subcat)
+        'Call LoadItemButtons("Forward", CLng(ItemID(Index)))
+        InSubCat = False
+        Exit Sub
+    End If
+    
+    strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+        & " ORDER BY Sequence"
+    Set rsCI = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    rsCI.MoveLast
+    If rsCI.EOF = False Then
+        gChkItmSeq = rsCI.Sequence + 1
+    Else
+        gChkItmSeq = 1
+    End If
+    rsCI.AddNew
+    rsCI.[Check Number] = gCurrentCheck
+    rsCI.Sequence = gChkItmSeq
+    rsCI.[Item Number] = ItemID(Index)
+    
+        
+    If Not misc Then
+        strSQL = "SELECT * FROM [Items] WHERE [Item Number] = " & rsCI.[Item Number]
+        Set rsI = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        rsI.MoveFirst
+        If rsI.EOF <> True Then
+            gChkItmDesc = rsI.Description
+            rsCI.Course = rsI.[Default Course]
+            cat = rsI.[Item Category]
+        End If
+        rsI.Close
+    End If
+    
+    ' get item price, and discount it if a check discount % exists
+    If Not misc Then
+        strSQL = "SELECT * FROM [Menu Items] WHERE [Menu ID] = " & gMenuID & " And [Item Number] = " & rsCI.[Item Number]
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        If Not rs.EOF Then
+            rsCI.[Item Price] = rs.Price
+            strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+            Set rs2 = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+            If Not rs2.EOF Then
+                If rs2.[Discount Percentage] > 0 Then
+                    rsCI.[Discount Amount] = rs.Price * CDbl(rs2.[Discount Percentage] * 0.01)
+                    rsCI.Price = rs.Price - rs.Price * CDbl(rs2.[Discount Percentage] * 0.01)
+                    rsCI.[Discount Percent] = rs2.[Discount Percentage]
+                Else
+                    rsCI.Price = rs.Price
+                End If
+            Else
+                rsCI.Price = rs.Price
+            End If
+        End If
+        rs.Close
+    Else
+    
+    End If
+    
+    rsCI.Update
+    rsCI.Close
+    'gCurrentItem = ItemID(Index)
+    
+    'CurrentSeq = gChkItmSeq
+    'set current index and sequence for "addnew" LoadCheckItems
+    'CurrentIdx = txtPerson.Count - 1
+    'Do While CurrentIdx >= 0
+    '    If txtSeq.Item(CurrentIdx) <> "" Then
+    '        Exit Do
+    '    End If
+    '    CurrentIdx = CurrentIdx - 1
+    'Loop
+       
+    LoadDir = "AddNew"
+    gAddNewCI = True
+    gCurrentItem = ItemID(Index)
+    
+    strSQL = "SELECT * FROM [Item Categories] WHERE [Detail Screen] And [Category] = " & cat
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not rs.EOF Then
+        gAddNewCI = True
+        Me.Enabled = False
+        gCICalledFrm = "frmBar"
+        gDupItem = False
+        frmOrderItem.Show
+    Else
+        gAddNewCI = False
+        RefreshGrid
+        'LoadCheckItems ("AddNew")
+        strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+        Set rs2 = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        If Not rs2.EOF Then
+            rs2.Edit
+            rs2.[Check Printed] = False
+            rs2.Update
+        End If
+        rs2.Close
+    End If
+    rs.Close
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Private Sub cmdQuick_Click(Index As Integer)
+    On Error GoTo ErrorHandler
+    Dim rs, rs2
+    
+    strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & gCurrentCheck _
+        & " ORDER BY Sequence"
+    Set rsCI = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+    rsCI.MoveLast
+    If rsCI.EOF = False Then
+        gChkItmSeq = rsCI.Sequence + 1
+    Else
+        gChkItmSeq = 1
+    End If
+    rsCI.AddNew
+    rsCI.[Check Number] = gCurrentCheck
+    rsCI.Sequence = gChkItmSeq
+    rsCI.[Item Number] = QItemID(Index)
+    rsCI.[Item Price] = QPrice(Index)
+    rsCI.[Price] = QPrice(Index)
+    rsCI.Update
+    rsCI.Close
+    
+    strSQL = "SELECT * FROM [Item Categories] WHERE [Detail Screen] And [Category] = " & QCat(Index)
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not rs.EOF Then
+        gAddNewCI = True
+        Me.Enabled = False
+        gCICalledFrm = "frmBar"
+        gChkItmDesc = cmdQuick(Index).Caption
+        gDupItem = False
+        frmOrderItem.Show
+    Else
+        gAddNewCI = False
+        RefreshGrid
+        strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+        Set rs2 = gDB.OpenRecordset(strSQL, dbOpenDynaset)
+        If Not rs2.EOF Then
+            rs2.Edit
+            rs2.[Check Printed] = False
+            rs2.Update
+        End If
+        rs2.Close
+    End If
+    rs.Close
+
+
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Private Sub cmdMoreCats_Click()
+    On Error GoTo ErrorHandler
+    
+    'strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    'Set rsC = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    Call LoadMenuCats(gMenuID, True)
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Private Sub cmdCategories_Click(Index As Integer)
+    On Error GoTo ErrorHandler
+    Dim rs
+    
+    ctr = 0
+    For Each elmt In cmdCategories
+        cmdCategories.Item(ctr).BackColor = &HA8C2E6
+        ctr = ctr + 1
+    Next elmt
+    cmdCategories.Item(Index).BackColor = &HFFFFFF
+    CurrentCat = CatKeys(Index)
+    strSQL = "SELECT COUNT(*) as cnt FROM [Item Sub Categories] WHERE Category = " & CurrentCat
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If rs.cnt > 0 Then
+        InSubCat = True
+        subcat = 99999
+        Call LoadItemButtons("Forward", subcat)
+    Else
+        InSubCat = False
+        subcat = 0
+        Call LoadItemButtons("Forward", subcat)
+    End If
+    rs.Close
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+
+Private Sub cmdMoreItemsL_Click()
+    
+    Call LoadItemButtons("Left", subcat)
+    'If InSubCat Then
+        'subcat = CLng(ItemID(0))
+        'Call LoadItemButtons("Left", subcat)
+    'Else
+    '    Call LoadItemButtons("Left", 0)
+    'End If
+    
+End Sub
+Private Sub cmdMoreItemsR_Click()
+    
+    Call LoadItemButtons("Right", subcat)
+    'If InSubCat Then
+        'Dim subcat As Long
+        'subcat = CLng(ItemID(0))
+        'Call LoadItemButtons("Right", subcat)
+    'Else
+    '    Call LoadItemButtons("Right", 0)
+    'End If
+    
+End Sub
+Public Sub LoadItemButtons(LoadDirection As String, subcat As Long) '  load menu items and categories
+    On Error GoTo ErrorHandler
+    
+    'strSQL = "SELECT * FROM Checks WHERE [Check Number] = " & gCurrentCheck
+    'Set rsC = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If subcat = 99999 Then  ' load the sub categories if passed subcat 99999
+        strSQL = "SELECT * FROM [Item Sub Categories] WHERE Category = " & CurrentCat
+    ElseIf subcat <> 0 Then  ' load the items for the cat/subcat
+        strSQL = "SELECT [Item Number] FROM [Menu Items] as A WHERE [Menu ID] = " & gMenuID _
+            & " And EXISTS (SELECT * FROM Items as B WHERE [Item Category] = " & CurrentCat _
+            & " And A.[Item Number] = B.[Item Number] And B.[Sub Category] = " & subcat _
+            & ") ORDER BY [Display Seq]"
+    Else  ' load the items for the cat
+        strSQL = "SELECT [Item Number] FROM [Menu Items] as A WHERE [Menu ID] = " & gMenuID _
+            & " And EXISTS (SELECT * FROM Items as B WHERE [Item Category] = " & CurrentCat _
+            & " And A.[Item Number] = B.[Item Number]) ORDER BY [Display Seq]"
+    End If
+    Set rsMenuI = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    
+    If LoadDirection = "Right" Then
+        If subcat = 99999 Then
+            rsMenuI.FindFirst "[Sub Category] = " & ItemID(UBound(ItemID))
+        Else
+            rsMenuI.FindFirst "[Item Number] = " & ItemID(UBound(ItemID))
+        End If
+        rsMenuI.MoveNext
+        PriorItem0 = ItemID(0)
+    ElseIf LoadDirection = "Left" Then
+        If subcat = 99999 Then
+            rsMenuI.FindFirst "[Sub Category] = " & PriorItem0
+        Else
+            rsMenuI.FindFirst "[Item Number] = " & PriorItem0
+        End If
+    Else
+        rsMenuI.MoveFirst
+    End If
+    
+    ctr = 0
+    Do While ctr < cmdMenuItems.Count
+        If rsMenuI.EOF = False Then
+            If ctr = 0 Then  ' save key of cell 0
+                If subcat = 99999 Then
+                    Item0 = rsMenuI.[Sub Category]
+                Else
+                    Item0 = rsMenuI.[Item Number]
+                End If
+            End If
+            If subcat = 99999 Then
+                ItemID(ctr) = rsMenuI.[Sub Category]
+                strSQL = "SELECT * FROM [Item Sub Categories] WHERE [Category] = " & CurrentCat _
+                    & " And [Sub Category] = " & rsMenuI.[Sub Category]
+                Set rsI = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+                rsI.MoveFirst
+                If rsI.EOF = False Then
+                    cmdMenuItems(ctr).Caption = rsI.Description
+                    cmdMenuItems(ctr).Enabled = True
+                Else
+                    cmdMenuItems(ctr).Caption = "Sub Cat " & rsMenuI.[Sub Category] & " Not Found"
+                    cmdMenuItems(ctr).Enabled = False
+                End If
+                rsI.Close
+            Else
+                ItemID(ctr) = rsMenuI.[Item Number]
+                strSQL = "SELECT * FROM [Items] WHERE [Item Number] = " & rsMenuI.[Item Number]
+                Set rsI = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+                rsI.MoveFirst
+                If rsI.EOF = False Then
+                    cmdMenuItems(ctr).Caption = rsI.Description
+                    cmdMenuItems(ctr).Enabled = True
+                Else
+                    cmdMenuItems(ctr).Caption = "Item " & rsMenuI.[Item Number] & " Not Found"
+                    cmdMenuItems(ctr).Enabled = False
+                End If
+                rsI.Close
+            End If
+        Else
+            cmdMenuItems(ctr).Caption = ""
+            ItemID(ctr) = ""
+            cmdMenuItems(ctr).Enabled = False
+        End If
+        rsMenuI.MoveNext
+        ctr = ctr + 1
+    Loop
+
+    If rsMenuI.EOF = False Then  ' any more menu items in recordset?
+        cmdMoreItemsR.Enabled = True
+    Else
+        cmdMoreItemsR.Enabled = False
+    End If
+    If subcat = 99999 Then
+        rsMenuI.FindFirst "[Sub Category] = " & ItemID(0)
+    Else
+        rsMenuI.FindFirst "[Item Number] = " & ItemID(0)
+    End If
+    rsMenuI.MovePrevious
+    If rsMenuI.BOF = False Then
+        cmdMoreItemsL.Enabled = True
+    Else
+        cmdMoreItemsL.Enabled = False
+    End If
+    rsMenuI.Close
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Public Sub LoadMenuCats(gMenuID As Long, NextCat As Boolean)  ' load menu categories to category buttons
+    
+    strSQL = "SELECT * FROM [Menu Categories] WHERE [Menu ID] = " & gMenuID _
+        & " ORDER BY [Bar Display Seq]"
+    Set rsMenuCat = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    
+    If NextCat = True And CatKeys(9) <> "" Then  ' get next cats if user pressed "More Categories"
+        rsMenuCat.FindFirst "Category = " & CatKeys(9)
+        rsMenuCat.MoveNext
+        If rsMenuCat.EOF = True Then
+            rsMenuCat.MoveFirst
+        Else
+            rsMenuCat.MovePrevious
+        End If
+    Else
+        rsMenuCat.MoveFirst
+    End If
+    
+    ctr = 0
+    Do While ctr < 10
+        cmdCategories.Item(ctr).Caption = ""
+        CatKeys(ctr) = ""
+        cmdCategories.Item(ctr).Enabled = False
+        If rsMenuCat.EOF = False Then
+            CatKeys(ctr) = rsMenuCat.Category
+            strSQL = "SELECT * FROM [Item Categories] WHERE Category = " & rsMenuCat.Category
+            Set rsICat = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+            rsICat.MoveFirst
+            If rsICat.EOF = False Then
+                cmdCategories(ctr).Caption = rsICat.Description
+                cmdCategories.Item(ctr).Enabled = True
+            Else
+                cmdCategories(ctr).Caption = "Category " & rsMenuCat.Category _
+                & " not found."
+            End If
+            rsICat.Close
+            rsMenuCat.MoveNext
+        End If
+        ctr = ctr + 1
+    Loop
+    
+    rsMenuCat.Close
+    cmdCategories_Click (0)
+End Sub
+Private Sub LoadPops()
+    On Error GoTo eh
+    Dim i As Integer, rs
+    
+    strSQL = "SELECT mi.Price, i.Description, mi.[Item Number], i.[Item Category] " _
+        & "FROM [Menu Items] mi INNER JOIN Items i " _
+        & "ON mi.[Item Number] = i.[Item Number] " _
+        & "WHERE mi.[Bar Pop Item] And mi.[Menu ID] = " & gMenuID _
+        & " ORDER BY mi.[Bar Pop Item Seq]"
+    Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+    If Not rs.EOF Then
+        For i = 0 To cmdQuick.Count - 1
+            cmdQuick(i).Caption = rs.Description
+            QItemID(i) = rs.[Item Number]
+            QPrice(i) = rs.Price
+            QCat(i) = rs.[Item Category]
+            rs.MoveNext
+            If rs.EOF Then Exit For
+        Next i
+    End If
+    rs.Close
+    
+    Exit Sub
+eh:
+    Resume Next
+End Sub
+Private Sub cmdNewOrd_Click()
+    On Error GoTo ErrorHandler
+
+    saveCheck = gCurrentCheck
+    gBarScreen = False
+    gOrdEntCalledFrm = "frmBar"
+    gNewOrd = True
+    CreateCheck "New"
+    If Not gCancelButton Then
+        frmOrderEntry.Show
+        'Me.Enabled = False
+        Unload Me
+    Else
+        gCancelButton = False
+    End If
+    
+    Exit Sub
+ErrorHandler:
+    Resume Next
+End Sub
+Private Sub cmdAllChecks_Click()
+    On Error Resume Next
+    saveCheck = gCurrentCheck
+    gBarScreen = False
+    Unload frmOrdersEmp
+    gOrdersEmpCalledFrm = "frmBar"
+    frmOrdersEmp.Show
+    Unload Me
+End Sub
+Private Sub cmdNewTab_Click()
+    'On Error GoTo eh
+    gCurrentCheck = 0
+    LogOut = False
+    Unload Me
+    frmBar.Show
+End Sub
+Private Sub cmdExit_Click()
+    On Error GoTo eh
+    Unload Me
+    Exit Sub
+eh:
+    Resume Next
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    On Error GoTo eh
+    Dim i As Integer, rs
+    
+    'If CheckAdded Then
+        strSQL = "SELECT * FROM [Check Items] WHERE [Check Number] = " & BarCheck _
+            & " AND Deleted <> TRUE"
+        Set rs = gDB.OpenRecordset(strSQL, dbOpenSnapshot)
+        rs.MoveLast
+        If rs.RecordCount = 0 Then
+            strSQL = "DELETE FROM Checks WHERE [Check Number] = " & BarCheck
+            gDB.Execute strSQL
+            gCurrentCheck = 0
+            If fncIsLoaded("frmOrdersEmp") Then frmOrdersEmp.LoadOrders "Refresh"
+        End If
+        rs.Close
+    'End If
+    
+    gBarScreen = False
+    'If gCalledFrom <> "frmOrdersEmp" And LogOut Then
+    If Not fncIsLoaded("frmOrdersEmp") And Not fncIsLoaded("frmOrderEntry") And LogOut Then
+        gLoggedIn = False
+        gLoggedInEmp = 0
+        frmMainMenu.lblStaff = ""
+    Else
+        frmOrdersEmp.LoadOrders ("AddNew")
+    End If
+    'gCalledFrom = ""
+    gBarNoChanges = False
+    gAddNewCI = False
+    'rsC.Close
+    Unload dlgMessage
+
+    Exit Sub
+eh:
+    Resume Next
+End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
